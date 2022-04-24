@@ -2,13 +2,15 @@ import sys
 import re
 import ply.lex as lex
 
-tokens = ["LEX","YACC",
+tokens = ["LEX","YACC","PYTHON",
         "LITERALS","LITERAL","FIMLITERAL",
         "IGNORES","IGNORED","FIMIGNORES",
         "TOKENS","FIMTOKENS",
         "TOKENDESC","ERRORDESC",
+        "LEXDEC",
         "VARIABLE","YACCDEC",
-        "PRECEDENCE","PRECEDENCESING","PRECEDENCEFIM"
+        "PRECEDENCE","PRECEDENCESING","PRECEDENCEFIM",
+        "PRODUCTION",
         "COMMENT","TEXTO"]
 
 states = (
@@ -18,13 +20,13 @@ states = (
     ("lexIgnoresState","exclusive"),
     ("lexTokensState","exclusive"),
     ("yaccPrecedenceState","exclusive"),
+    ("pythonState","exclusive"),
 )
 
 tokenDescription = re.compile(r'^(.*[^\s])\s*return\(\s*\'(\w+)\'\s*,\s*([^\s]*)\s*\)')
 errorDescription = re.compile(r'\.\s*error\(\s*f\"(.+)\"\s*,\s*(.+)\s*\)')
-
-yacc_state_variables = [] #Print when yacc is declared
-yacc_variable_name = ""
+productionDescription = re.compile(r'^(([a-zA-Z_]\w*)\s+:\s+.+[^\s])\s*{\s*(.*)\s*}')
+lexerDeclaration = re.compile(r'([a-zA-Z]\w*)\s*=\s*lex\(\)')
 
 #Entering States
 def t_ANY_LEX(t):
@@ -38,6 +40,10 @@ def t_ANY_YACC(t):
     print()
     print("import ply.yacc as yacc")
     t.lexer.begin("yaccState")
+
+def t_ANY_PYTHON(t):
+    r'%%'
+    t.lexer.begin("pythonState")
 
 #Lexer
 def t_lexState_LITERALS(t):
@@ -61,7 +67,8 @@ def t_lexState_TOKENDESC(t):
     aux = tokenDescription.match(t.value)
     print("def t_" + aux.group(2) + "(t):")
     print("\tr\'"+ aux.group(1) + "\'")
-    print("\treturn " + aux.group(3))
+    print("\tt.value = " + aux.group(3))
+    print("\treturn t")
 
 def t_lexState_ERRORDESC(t):
     r'\.(\s|\n)*error\(.+\)'
@@ -70,6 +77,11 @@ def t_lexState_ERRORDESC(t):
     print("def t_error(t):")
     print("\tprint(\""+aux.group(1)+"\")")
     print("\t"+aux.group(2))
+
+def t_lexState_LEXDEC(t):
+    r'[a-zA-Z]\w*\s*=\s*lex\(\)'
+    aux = lexerDeclaration.match(t.value)
+    print("\n"+aux.group(1)+"=lex.lex()")
 
 t_lexState_ignore = "\t\n"
 
@@ -104,22 +116,22 @@ def t_lexTokensState_TEXTO(t):
     print(t.value,end="")
 
 #Yacc State
-def t_yaccState_YACCDEC(t):
-    r'^[a-zA-Z_]\w*\s*=\s*yacc\(\)'
-    aux = re.match(r'^([a-zA-Z_]\w*)\s*=',t.value)
-    yacc_variable_name = aux.group(1) #Save yacc() variable name
-    print("\n"+t.value)
-    for v in yacc_state_variables:
-        print(yacc_variable_name + "." + v)
+def t_yaccState_PRECEDENCE(t):
+    r'%precedence\s*=\s*\['
+    print("\nprecedence = (",end="")
+    t.lexer.begin("yaccPrecedenceState")
+
+def t_yaccState_PRODUCTION(t):
+    r'^[a-zA-Z_]\w*\s+:\s+(.+)\s*{(.*)}'
+    aux = productionDescription.match(t.value)
+    print("def p_"+ aux.group(2) + "_" + str(lexer.nProductions) + "(t):")
+    lexer.nProductions += 1
+    print("\t"+"\""+aux.group(1)+"\"")
+    print("\t"+aux.group(3))
 
 def t_yaccState_VARIABLE(t):
     r'^[a-zA-Z_]\w*\s*=\s*.+\s*'
-    yacc_state_variables.append(t.value)
-
-def t_yaccState_PRECEDENCE(t):
-    r'%precedence\s*=\s*\['
-    print("\nprecendence = (",end="")
-    t.lexer.begin("yaccPrecedenceState")
+    print(t.value)
 
 t_yaccState_ignore = "\t\n"
 
@@ -127,10 +139,19 @@ t_yaccState_ignore = "\t\n"
 
 def t_yaccPrecedenceState_PRECEDENCEFIM(t):
     r'\]'
-    print("\t)\n")
+    print(")\n")
     t.lexer.begin("yaccState")
 
 def t_yaccPrecedenceState_TEXTO(t):
+    r'.|\n'
+    print(t.value,end="")
+
+#Python
+def t_pythonState_YACCDEC(t):
+    r'yacc\(\)'
+    print("yacc.yacc()",end="")
+
+def t_pythonState_TEXTO(t):
     r'.|\n'
     print(t.value,end="")
 
@@ -142,7 +163,6 @@ def t_ANY_COMMENT(t):
      #pass to ignore comments
 
 #Resto
-
 def t_ANY_TEXTO(t):
     r'.|\n'
     #print(t.value,end="")
@@ -153,6 +173,7 @@ def t_ANY_error(t):
     t.lexer.skip(1)
 
 lexer = lex.lex()
+lexer.nProductions = 0
 
 for linha in sys.stdin:
     lexer.input(linha)
