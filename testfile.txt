@@ -2,10 +2,11 @@
 %literals = "+-/*=()"           ## a single char
 %ignore = " \t\n"
 %tokens = [ 'VAR','NUMBER' ]
-
-[a-zA-Z_][a-zA-Z0-9_]* return('VAR', t.value)
-\d+(\.\d+)?            return('NUMBER', float(t.value))
-.                      error(f"Illegal character '{t.value[0]}', [{t.lexer.lineno}]",t.lexer.skip(1) )
+#Passam a ter \' no segundo argumento e 
+#r'...' para defenir a expressao regular
+r'[a-zA-Z_][a-zA-Z0-9_]*' return('VAR', 't.value')
+r'\d+(\.\d+)?'            return('NUMBER', 'float(t.value)')
+.                         error(f"Illegal character '{t.value[0]}', [{t.lexer.lineno}]",t.lexer.skip(1) )
 
 lexer=lex()
 %% YACC
