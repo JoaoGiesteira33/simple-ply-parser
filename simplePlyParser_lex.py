@@ -8,77 +8,96 @@ literals = ['(',')',',','=','[',']',
             '.',':','}','{']
 tokens = ['LEX','YACC','CODE',
         'LexLITERALS','LexIGNORE','LexTOKENS','fLEX',
-        'YaccPRECEDENCE','fYACC',
+        'YaccPRECEDENCE','fYACC','YaccVariable','PREC',
         'DEF','RETURN','ERROR',
-        'ID',
+        'id',
         'quotationStr','apostropheStr','regex',
-        'COMMENT','TEXTO']
+        'comment','productioncode']
 
-def t_LEX(t):
+states = (
+    ('lexstate','exclusive'),
+    ('yaccstate','exclusive'),
+    ('codestate','exclusive'),
+)
+
+def t_ANY_LEX(t):
     r'%%\s*LEX'
+    t.lexer.begin('lexstate')
     return t
-def t_YACC(t):
+def t_ANY_YACC(t):
     r'%%\s*YACC'
+    t.lexer.begin('yaccstate')
     return t
-def t_CODE(t):
+def t_ANY_CODE(t):
     r'%%'
+    t.lexer.begin('codestate')
     return t
 
-def t_LexLITERALS(t):
+def t_lexstate_LexLITERALS(t):
     r'%literals'
     return t
-def t_LexIGNORE(t):
+def t_lexstate_LexIGNORE(t):
     r'%ignore'
     return t
-def t_LexTOKENS(t):
+def t_lexstate_LexTOKENS(t):
     r'%tokens'
     return t
-def t_fLEX(t):
+def t_lexstate_fLEX(t):
     r'lex\(\)'
     return t
 
-def t_YaccPRECEDENCE(t):
+def t_yaccstate_YaccPRECEDENCE(t):
     r'%precedence'
     return t
-def t_fYACC(t):
+def t_yaccstate_PREC(t):
+    r'%prec'
+    return t
+def t_yaccstate_fYACC(t):
     r'yacc\(\)'
     return t
 
-def t_DEF(t):
+def t_codestate_DEF(t):
     r'def'
     return t
-def t_RETURN(t):
-    r'return'
+def t_lexstate_RETURN(t):
+    r'return\(\s*\'(\w+)\'\s*,\s*([^\s]*)\s*\)'
     return t
-def t_ERROR(t):
-    r'error'
+def t_lexstate_ERROR(t):
+    r'error\(\s*f\"(.+)\"\s*,\s*(.+)\s*\)'
     return t
 
-def t_regex(t):
+def t_lexstate_regex(t):
     r'r\'((\\\')|[^\'])*\''
     return t
-def t_quotationStr(t):
+def t_ANY_quotationStr(t):
     r'\"[^"]*\"'
     return t
-def t_apostropheStr(t):
+def t_ANY_apostropheStr(t):
     r'\'[^\']*\''
     return t
-def t_ID(t):
+
+def t_yaccstate_YaccVariable(t):
+    r'[a-zA-Z_]\w*\s*=\s*.*[^\s]'
+    return t
+def t_ANY_id(t):
     r'[a-zA-Z_]\w*'
     return t
+def t_yaccstate_productioncode(t):
+    r'\{.*\}'
+    return t
 
-t_ignore = " \t\n"
 
-#def t_newline(t):
-   # r'\n'
-    #t.lexer.lexpos += t.lexer.lexpos + 1
 
-def t_COMMENT(t):
-     r'\#.*'
-     pass
-     # No return value. Token discarded
+t_ANY_ignore = " \t"
 
-def t_error(t):
+def t_ANY_newline(t):
+    r'\n'
+    pass
+def t_ANY_comment(t):
+    r'\#.*'
+    pass
+     
+def t_ANY_error(t):
     #print("Caráter Ilegal:", t.value[0])
     t.lexer.skip(1)
 
