@@ -1,0 +1,850 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    DEF
+    comment
+    fYACC
+    functionParameters
+    functionText
+    regexreturn
+
+Grammar
+
+Rule 0     S' -> Program
+Rule 1     Program -> LEX LexDefinition YACC YaccDefinition CODE
+Rule 2     LexDefinition -> LexVALUES LexBEHAVIOR LexDECLARATION
+Rule 3     LexVALUES -> LexVALUES LexVALUE
+Rule 4     LexVALUES -> LexVALUE
+Rule 5     LexVALUE -> LexLITERALS EQUALS quotationStr
+Rule 6     LexVALUE -> LexIGNORE EQUALS quotationStr
+Rule 7     LexVALUE -> LexTOKENS EQUALS LBRACKET TokenList RBRACKET
+Rule 8     TokenList -> TokenList COMMA apostropheStr
+Rule 9     TokenList -> apostropheStr
+Rule 10    LexBEHAVIOR -> TokenDefinitions ErrorDefinition
+Rule 11    TokenDefinitions -> TokenDefinitions TokenDefinition
+Rule 12    TokenDefinitions -> <empty>
+Rule 13    TokenDefinition -> regex RETURN LPARENTHESIS apostropheStr COMMA RETURNVALUE RPARENTHESIS
+Rule 14    RETURNVALUE -> RETURNVALUE text
+Rule 15    RETURNVALUE -> RETURNVALUE LPARENTHESIS
+Rule 16    RETURNVALUE -> RETURNVALUE RPARENTHESIS
+Rule 17    RETURNVALUE -> <empty>
+Rule 18    ErrorDefinition -> POINT ERROR LPARENTHESIS quotationStr COMMA ERRORVALUE RPARENTHESIS
+Rule 19    ERRORVALUE -> ERRORVALUE text
+Rule 20    ERRORVALUE -> ERRORVALUE LPARENTHESIS
+Rule 21    ERRORVALUE -> ERRORVALUE RPARENTHESIS
+Rule 22    ERRORVALUE -> <empty>
+Rule 23    LexDECLARATION -> id EQUALS fLEX
+Rule 24    YaccDefinition -> YaccDefinition YaccPRECEDENCE EQUALS LBRACKET precedenceList RBRACKET
+Rule 25    YaccDefinition -> YaccDefinition YaccVariable
+Rule 26    YaccDefinition -> YaccDefinition Production
+Rule 27    YaccDefinition -> <empty>
+Rule 28    precedenceList -> precedenceList LPARENTHESIS precedenceElement RPARENTHESIS COMMA
+Rule 29    precedenceList -> LPARENTHESIS precedenceElement RPARENTHESIS COMMA
+Rule 30    YaccVariable -> id EQUALS text
+Rule 31    precedenceElement -> precedenceElement COMMA apostropheStr
+Rule 32    precedenceElement -> apostropheStr COMMA apostropheStr
+Rule 33    Production -> id COLON SimbolList LCBRACKET text RCBRACKET
+Rule 34    SimbolList -> SimbolList id
+Rule 35    SimbolList -> SimbolList apostropheStr
+Rule 36    SimbolList -> SimbolList PREC
+Rule 37    SimbolList -> <empty>
+
+Terminals, with rules where they appear
+
+CODE                 : 1
+COLON                : 33
+COMMA                : 8 13 18 28 29 31 32
+DEF                  : 
+EQUALS               : 5 6 7 23 24 30
+ERROR                : 18
+LBRACKET             : 7 24
+LCBRACKET            : 33
+LEX                  : 1
+LPARENTHESIS         : 13 15 18 20 28 29
+LexIGNORE            : 6
+LexLITERALS          : 5
+LexTOKENS            : 7
+POINT                : 18
+PREC                 : 36
+RBRACKET             : 7 24
+RCBRACKET            : 33
+RETURN               : 13
+RPARENTHESIS         : 13 16 18 21 28 29
+YACC                 : 1
+YaccPRECEDENCE       : 24
+apostropheStr        : 8 9 13 31 32 32 35
+comment              : 
+error                : 
+fLEX                 : 23
+fYACC                : 
+functionParameters   : 
+functionText         : 
+id                   : 23 30 33 34
+quotationStr         : 5 6 18
+regex                : 13
+regexreturn          : 
+text                 : 14 19 30 33
+
+Nonterminals, with rules where they appear
+
+ERRORVALUE           : 18 19 20 21
+ErrorDefinition      : 10
+LexBEHAVIOR          : 2
+LexDECLARATION       : 2
+LexDefinition        : 1
+LexVALUE             : 3 4
+LexVALUES            : 2 3
+Production           : 26
+Program              : 0
+RETURNVALUE          : 13 14 15 16
+SimbolList           : 33 34 35 36
+TokenDefinition      : 11
+TokenDefinitions     : 10 11
+TokenList            : 7 8
+YaccDefinition       : 1 24 25 26
+YaccVariable         : 25
+precedenceElement    : 28 29 31
+precedenceList       : 24 28
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . Program
+    (1) Program -> . LEX LexDefinition YACC YaccDefinition CODE
+
+    LEX             shift and go to state 2
+
+    Program                        shift and go to state 1
+
+state 1
+
+    (0) S' -> Program .
+
+
+
+state 2
+
+    (1) Program -> LEX . LexDefinition YACC YaccDefinition CODE
+    (2) LexDefinition -> . LexVALUES LexBEHAVIOR LexDECLARATION
+    (3) LexVALUES -> . LexVALUES LexVALUE
+    (4) LexVALUES -> . LexVALUE
+    (5) LexVALUE -> . LexLITERALS EQUALS quotationStr
+    (6) LexVALUE -> . LexIGNORE EQUALS quotationStr
+    (7) LexVALUE -> . LexTOKENS EQUALS LBRACKET TokenList RBRACKET
+
+    LexLITERALS     shift and go to state 6
+    LexIGNORE       shift and go to state 7
+    LexTOKENS       shift and go to state 8
+
+    LexDefinition                  shift and go to state 3
+    LexVALUES                      shift and go to state 4
+    LexVALUE                       shift and go to state 5
+
+state 3
+
+    (1) Program -> LEX LexDefinition . YACC YaccDefinition CODE
+
+    YACC            shift and go to state 9
+
+
+state 4
+
+    (2) LexDefinition -> LexVALUES . LexBEHAVIOR LexDECLARATION
+    (3) LexVALUES -> LexVALUES . LexVALUE
+    (10) LexBEHAVIOR -> . TokenDefinitions ErrorDefinition
+    (5) LexVALUE -> . LexLITERALS EQUALS quotationStr
+    (6) LexVALUE -> . LexIGNORE EQUALS quotationStr
+    (7) LexVALUE -> . LexTOKENS EQUALS LBRACKET TokenList RBRACKET
+    (11) TokenDefinitions -> . TokenDefinitions TokenDefinition
+    (12) TokenDefinitions -> .
+
+    LexLITERALS     shift and go to state 6
+    LexIGNORE       shift and go to state 7
+    LexTOKENS       shift and go to state 8
+    POINT           reduce using rule 12 (TokenDefinitions -> .)
+    regex           reduce using rule 12 (TokenDefinitions -> .)
+
+    LexBEHAVIOR                    shift and go to state 10
+    LexVALUE                       shift and go to state 11
+    TokenDefinitions               shift and go to state 12
+
+state 5
+
+    (4) LexVALUES -> LexVALUE .
+
+    LexLITERALS     reduce using rule 4 (LexVALUES -> LexVALUE .)
+    LexIGNORE       reduce using rule 4 (LexVALUES -> LexVALUE .)
+    LexTOKENS       reduce using rule 4 (LexVALUES -> LexVALUE .)
+    POINT           reduce using rule 4 (LexVALUES -> LexVALUE .)
+    regex           reduce using rule 4 (LexVALUES -> LexVALUE .)
+
+
+state 6
+
+    (5) LexVALUE -> LexLITERALS . EQUALS quotationStr
+
+    EQUALS          shift and go to state 13
+
+
+state 7
+
+    (6) LexVALUE -> LexIGNORE . EQUALS quotationStr
+
+    EQUALS          shift and go to state 14
+
+
+state 8
+
+    (7) LexVALUE -> LexTOKENS . EQUALS LBRACKET TokenList RBRACKET
+
+    EQUALS          shift and go to state 15
+
+
+state 9
+
+    (1) Program -> LEX LexDefinition YACC . YaccDefinition CODE
+    (24) YaccDefinition -> . YaccDefinition YaccPRECEDENCE EQUALS LBRACKET precedenceList RBRACKET
+    (25) YaccDefinition -> . YaccDefinition YaccVariable
+    (26) YaccDefinition -> . YaccDefinition Production
+    (27) YaccDefinition -> .
+
+    CODE            reduce using rule 27 (YaccDefinition -> .)
+    YaccPRECEDENCE  reduce using rule 27 (YaccDefinition -> .)
+    id              reduce using rule 27 (YaccDefinition -> .)
+
+    YaccDefinition                 shift and go to state 16
+
+state 10
+
+    (2) LexDefinition -> LexVALUES LexBEHAVIOR . LexDECLARATION
+    (23) LexDECLARATION -> . id EQUALS fLEX
+
+    id              shift and go to state 18
+
+    LexDECLARATION                 shift and go to state 17
+
+state 11
+
+    (3) LexVALUES -> LexVALUES LexVALUE .
+
+    LexLITERALS     reduce using rule 3 (LexVALUES -> LexVALUES LexVALUE .)
+    LexIGNORE       reduce using rule 3 (LexVALUES -> LexVALUES LexVALUE .)
+    LexTOKENS       reduce using rule 3 (LexVALUES -> LexVALUES LexVALUE .)
+    POINT           reduce using rule 3 (LexVALUES -> LexVALUES LexVALUE .)
+    regex           reduce using rule 3 (LexVALUES -> LexVALUES LexVALUE .)
+
+
+state 12
+
+    (10) LexBEHAVIOR -> TokenDefinitions . ErrorDefinition
+    (11) TokenDefinitions -> TokenDefinitions . TokenDefinition
+    (18) ErrorDefinition -> . POINT ERROR LPARENTHESIS quotationStr COMMA ERRORVALUE RPARENTHESIS
+    (13) TokenDefinition -> . regex RETURN LPARENTHESIS apostropheStr COMMA RETURNVALUE RPARENTHESIS
+
+    POINT           shift and go to state 21
+    regex           shift and go to state 22
+
+    ErrorDefinition                shift and go to state 19
+    TokenDefinition                shift and go to state 20
+
+state 13
+
+    (5) LexVALUE -> LexLITERALS EQUALS . quotationStr
+
+    quotationStr    shift and go to state 23
+
+
+state 14
+
+    (6) LexVALUE -> LexIGNORE EQUALS . quotationStr
+
+    quotationStr    shift and go to state 24
+
+
+state 15
+
+    (7) LexVALUE -> LexTOKENS EQUALS . LBRACKET TokenList RBRACKET
+
+    LBRACKET        shift and go to state 25
+
+
+state 16
+
+    (1) Program -> LEX LexDefinition YACC YaccDefinition . CODE
+    (24) YaccDefinition -> YaccDefinition . YaccPRECEDENCE EQUALS LBRACKET precedenceList RBRACKET
+    (25) YaccDefinition -> YaccDefinition . YaccVariable
+    (26) YaccDefinition -> YaccDefinition . Production
+    (30) YaccVariable -> . id EQUALS text
+    (33) Production -> . id COLON SimbolList LCBRACKET text RCBRACKET
+
+    CODE            shift and go to state 26
+    YaccPRECEDENCE  shift and go to state 27
+    id              shift and go to state 30
+
+    YaccVariable                   shift and go to state 28
+    Production                     shift and go to state 29
+
+state 17
+
+    (2) LexDefinition -> LexVALUES LexBEHAVIOR LexDECLARATION .
+
+    YACC            reduce using rule 2 (LexDefinition -> LexVALUES LexBEHAVIOR LexDECLARATION .)
+
+
+state 18
+
+    (23) LexDECLARATION -> id . EQUALS fLEX
+
+    EQUALS          shift and go to state 31
+
+
+state 19
+
+    (10) LexBEHAVIOR -> TokenDefinitions ErrorDefinition .
+
+    id              reduce using rule 10 (LexBEHAVIOR -> TokenDefinitions ErrorDefinition .)
+
+
+state 20
+
+    (11) TokenDefinitions -> TokenDefinitions TokenDefinition .
+
+    POINT           reduce using rule 11 (TokenDefinitions -> TokenDefinitions TokenDefinition .)
+    regex           reduce using rule 11 (TokenDefinitions -> TokenDefinitions TokenDefinition .)
+
+
+state 21
+
+    (18) ErrorDefinition -> POINT . ERROR LPARENTHESIS quotationStr COMMA ERRORVALUE RPARENTHESIS
+
+    ERROR           shift and go to state 32
+
+
+state 22
+
+    (13) TokenDefinition -> regex . RETURN LPARENTHESIS apostropheStr COMMA RETURNVALUE RPARENTHESIS
+
+    RETURN          shift and go to state 33
+
+
+state 23
+
+    (5) LexVALUE -> LexLITERALS EQUALS quotationStr .
+
+    LexLITERALS     reduce using rule 5 (LexVALUE -> LexLITERALS EQUALS quotationStr .)
+    LexIGNORE       reduce using rule 5 (LexVALUE -> LexLITERALS EQUALS quotationStr .)
+    LexTOKENS       reduce using rule 5 (LexVALUE -> LexLITERALS EQUALS quotationStr .)
+    POINT           reduce using rule 5 (LexVALUE -> LexLITERALS EQUALS quotationStr .)
+    regex           reduce using rule 5 (LexVALUE -> LexLITERALS EQUALS quotationStr .)
+
+
+state 24
+
+    (6) LexVALUE -> LexIGNORE EQUALS quotationStr .
+
+    LexLITERALS     reduce using rule 6 (LexVALUE -> LexIGNORE EQUALS quotationStr .)
+    LexIGNORE       reduce using rule 6 (LexVALUE -> LexIGNORE EQUALS quotationStr .)
+    LexTOKENS       reduce using rule 6 (LexVALUE -> LexIGNORE EQUALS quotationStr .)
+    POINT           reduce using rule 6 (LexVALUE -> LexIGNORE EQUALS quotationStr .)
+    regex           reduce using rule 6 (LexVALUE -> LexIGNORE EQUALS quotationStr .)
+
+
+state 25
+
+    (7) LexVALUE -> LexTOKENS EQUALS LBRACKET . TokenList RBRACKET
+    (8) TokenList -> . TokenList COMMA apostropheStr
+    (9) TokenList -> . apostropheStr
+
+    apostropheStr   shift and go to state 35
+
+    TokenList                      shift and go to state 34
+
+state 26
+
+    (1) Program -> LEX LexDefinition YACC YaccDefinition CODE .
+
+    $end            reduce using rule 1 (Program -> LEX LexDefinition YACC YaccDefinition CODE .)
+
+
+state 27
+
+    (24) YaccDefinition -> YaccDefinition YaccPRECEDENCE . EQUALS LBRACKET precedenceList RBRACKET
+
+    EQUALS          shift and go to state 36
+
+
+state 28
+
+    (25) YaccDefinition -> YaccDefinition YaccVariable .
+
+    CODE            reduce using rule 25 (YaccDefinition -> YaccDefinition YaccVariable .)
+    YaccPRECEDENCE  reduce using rule 25 (YaccDefinition -> YaccDefinition YaccVariable .)
+    id              reduce using rule 25 (YaccDefinition -> YaccDefinition YaccVariable .)
+
+
+state 29
+
+    (26) YaccDefinition -> YaccDefinition Production .
+
+    CODE            reduce using rule 26 (YaccDefinition -> YaccDefinition Production .)
+    YaccPRECEDENCE  reduce using rule 26 (YaccDefinition -> YaccDefinition Production .)
+    id              reduce using rule 26 (YaccDefinition -> YaccDefinition Production .)
+
+
+state 30
+
+    (30) YaccVariable -> id . EQUALS text
+    (33) Production -> id . COLON SimbolList LCBRACKET text RCBRACKET
+
+    EQUALS          shift and go to state 37
+    COLON           shift and go to state 38
+
+
+state 31
+
+    (23) LexDECLARATION -> id EQUALS . fLEX
+
+    fLEX            shift and go to state 39
+
+
+state 32
+
+    (18) ErrorDefinition -> POINT ERROR . LPARENTHESIS quotationStr COMMA ERRORVALUE RPARENTHESIS
+
+    LPARENTHESIS    shift and go to state 40
+
+
+state 33
+
+    (13) TokenDefinition -> regex RETURN . LPARENTHESIS apostropheStr COMMA RETURNVALUE RPARENTHESIS
+
+    LPARENTHESIS    shift and go to state 41
+
+
+state 34
+
+    (7) LexVALUE -> LexTOKENS EQUALS LBRACKET TokenList . RBRACKET
+    (8) TokenList -> TokenList . COMMA apostropheStr
+
+    RBRACKET        shift and go to state 42
+    COMMA           shift and go to state 43
+
+
+state 35
+
+    (9) TokenList -> apostropheStr .
+
+    RBRACKET        reduce using rule 9 (TokenList -> apostropheStr .)
+    COMMA           reduce using rule 9 (TokenList -> apostropheStr .)
+
+
+state 36
+
+    (24) YaccDefinition -> YaccDefinition YaccPRECEDENCE EQUALS . LBRACKET precedenceList RBRACKET
+
+    LBRACKET        shift and go to state 44
+
+
+state 37
+
+    (30) YaccVariable -> id EQUALS . text
+
+    text            shift and go to state 45
+
+
+state 38
+
+    (33) Production -> id COLON . SimbolList LCBRACKET text RCBRACKET
+    (34) SimbolList -> . SimbolList id
+    (35) SimbolList -> . SimbolList apostropheStr
+    (36) SimbolList -> . SimbolList PREC
+    (37) SimbolList -> .
+
+    LCBRACKET       reduce using rule 37 (SimbolList -> .)
+    id              reduce using rule 37 (SimbolList -> .)
+    apostropheStr   reduce using rule 37 (SimbolList -> .)
+    PREC            reduce using rule 37 (SimbolList -> .)
+
+    SimbolList                     shift and go to state 46
+
+state 39
+
+    (23) LexDECLARATION -> id EQUALS fLEX .
+
+    YACC            reduce using rule 23 (LexDECLARATION -> id EQUALS fLEX .)
+
+
+state 40
+
+    (18) ErrorDefinition -> POINT ERROR LPARENTHESIS . quotationStr COMMA ERRORVALUE RPARENTHESIS
+
+    quotationStr    shift and go to state 47
+
+
+state 41
+
+    (13) TokenDefinition -> regex RETURN LPARENTHESIS . apostropheStr COMMA RETURNVALUE RPARENTHESIS
+
+    apostropheStr   shift and go to state 48
+
+
+state 42
+
+    (7) LexVALUE -> LexTOKENS EQUALS LBRACKET TokenList RBRACKET .
+
+    LexLITERALS     reduce using rule 7 (LexVALUE -> LexTOKENS EQUALS LBRACKET TokenList RBRACKET .)
+    LexIGNORE       reduce using rule 7 (LexVALUE -> LexTOKENS EQUALS LBRACKET TokenList RBRACKET .)
+    LexTOKENS       reduce using rule 7 (LexVALUE -> LexTOKENS EQUALS LBRACKET TokenList RBRACKET .)
+    POINT           reduce using rule 7 (LexVALUE -> LexTOKENS EQUALS LBRACKET TokenList RBRACKET .)
+    regex           reduce using rule 7 (LexVALUE -> LexTOKENS EQUALS LBRACKET TokenList RBRACKET .)
+
+
+state 43
+
+    (8) TokenList -> TokenList COMMA . apostropheStr
+
+    apostropheStr   shift and go to state 49
+
+
+state 44
+
+    (24) YaccDefinition -> YaccDefinition YaccPRECEDENCE EQUALS LBRACKET . precedenceList RBRACKET
+    (28) precedenceList -> . precedenceList LPARENTHESIS precedenceElement RPARENTHESIS COMMA
+    (29) precedenceList -> . LPARENTHESIS precedenceElement RPARENTHESIS COMMA
+
+    LPARENTHESIS    shift and go to state 51
+
+    precedenceList                 shift and go to state 50
+
+state 45
+
+    (30) YaccVariable -> id EQUALS text .
+
+    CODE            reduce using rule 30 (YaccVariable -> id EQUALS text .)
+    YaccPRECEDENCE  reduce using rule 30 (YaccVariable -> id EQUALS text .)
+    id              reduce using rule 30 (YaccVariable -> id EQUALS text .)
+
+
+state 46
+
+    (33) Production -> id COLON SimbolList . LCBRACKET text RCBRACKET
+    (34) SimbolList -> SimbolList . id
+    (35) SimbolList -> SimbolList . apostropheStr
+    (36) SimbolList -> SimbolList . PREC
+
+    LCBRACKET       shift and go to state 53
+    id              shift and go to state 52
+    apostropheStr   shift and go to state 54
+    PREC            shift and go to state 55
+
+
+state 47
+
+    (18) ErrorDefinition -> POINT ERROR LPARENTHESIS quotationStr . COMMA ERRORVALUE RPARENTHESIS
+
+    COMMA           shift and go to state 56
+
+
+state 48
+
+    (13) TokenDefinition -> regex RETURN LPARENTHESIS apostropheStr . COMMA RETURNVALUE RPARENTHESIS
+
+    COMMA           shift and go to state 57
+
+
+state 49
+
+    (8) TokenList -> TokenList COMMA apostropheStr .
+
+    RBRACKET        reduce using rule 8 (TokenList -> TokenList COMMA apostropheStr .)
+    COMMA           reduce using rule 8 (TokenList -> TokenList COMMA apostropheStr .)
+
+
+state 50
+
+    (24) YaccDefinition -> YaccDefinition YaccPRECEDENCE EQUALS LBRACKET precedenceList . RBRACKET
+    (28) precedenceList -> precedenceList . LPARENTHESIS precedenceElement RPARENTHESIS COMMA
+
+    RBRACKET        shift and go to state 58
+    LPARENTHESIS    shift and go to state 59
+
+
+state 51
+
+    (29) precedenceList -> LPARENTHESIS . precedenceElement RPARENTHESIS COMMA
+    (31) precedenceElement -> . precedenceElement COMMA apostropheStr
+    (32) precedenceElement -> . apostropheStr COMMA apostropheStr
+
+    apostropheStr   shift and go to state 61
+
+    precedenceElement              shift and go to state 60
+
+state 52
+
+    (34) SimbolList -> SimbolList id .
+
+    LCBRACKET       reduce using rule 34 (SimbolList -> SimbolList id .)
+    id              reduce using rule 34 (SimbolList -> SimbolList id .)
+    apostropheStr   reduce using rule 34 (SimbolList -> SimbolList id .)
+    PREC            reduce using rule 34 (SimbolList -> SimbolList id .)
+
+
+state 53
+
+    (33) Production -> id COLON SimbolList LCBRACKET . text RCBRACKET
+
+    text            shift and go to state 62
+
+
+state 54
+
+    (35) SimbolList -> SimbolList apostropheStr .
+
+    LCBRACKET       reduce using rule 35 (SimbolList -> SimbolList apostropheStr .)
+    id              reduce using rule 35 (SimbolList -> SimbolList apostropheStr .)
+    apostropheStr   reduce using rule 35 (SimbolList -> SimbolList apostropheStr .)
+    PREC            reduce using rule 35 (SimbolList -> SimbolList apostropheStr .)
+
+
+state 55
+
+    (36) SimbolList -> SimbolList PREC .
+
+    LCBRACKET       reduce using rule 36 (SimbolList -> SimbolList PREC .)
+    id              reduce using rule 36 (SimbolList -> SimbolList PREC .)
+    apostropheStr   reduce using rule 36 (SimbolList -> SimbolList PREC .)
+    PREC            reduce using rule 36 (SimbolList -> SimbolList PREC .)
+
+
+state 56
+
+    (18) ErrorDefinition -> POINT ERROR LPARENTHESIS quotationStr COMMA . ERRORVALUE RPARENTHESIS
+    (19) ERRORVALUE -> . ERRORVALUE text
+    (20) ERRORVALUE -> . ERRORVALUE LPARENTHESIS
+    (21) ERRORVALUE -> . ERRORVALUE RPARENTHESIS
+    (22) ERRORVALUE -> .
+
+    RPARENTHESIS    reduce using rule 22 (ERRORVALUE -> .)
+    text            reduce using rule 22 (ERRORVALUE -> .)
+    LPARENTHESIS    reduce using rule 22 (ERRORVALUE -> .)
+
+    ERRORVALUE                     shift and go to state 63
+
+state 57
+
+    (13) TokenDefinition -> regex RETURN LPARENTHESIS apostropheStr COMMA . RETURNVALUE RPARENTHESIS
+    (14) RETURNVALUE -> . RETURNVALUE text
+    (15) RETURNVALUE -> . RETURNVALUE LPARENTHESIS
+    (16) RETURNVALUE -> . RETURNVALUE RPARENTHESIS
+    (17) RETURNVALUE -> .
+
+    RPARENTHESIS    reduce using rule 17 (RETURNVALUE -> .)
+    text            reduce using rule 17 (RETURNVALUE -> .)
+    LPARENTHESIS    reduce using rule 17 (RETURNVALUE -> .)
+
+    RETURNVALUE                    shift and go to state 64
+
+state 58
+
+    (24) YaccDefinition -> YaccDefinition YaccPRECEDENCE EQUALS LBRACKET precedenceList RBRACKET .
+
+    CODE            reduce using rule 24 (YaccDefinition -> YaccDefinition YaccPRECEDENCE EQUALS LBRACKET precedenceList RBRACKET .)
+    YaccPRECEDENCE  reduce using rule 24 (YaccDefinition -> YaccDefinition YaccPRECEDENCE EQUALS LBRACKET precedenceList RBRACKET .)
+    id              reduce using rule 24 (YaccDefinition -> YaccDefinition YaccPRECEDENCE EQUALS LBRACKET precedenceList RBRACKET .)
+
+
+state 59
+
+    (28) precedenceList -> precedenceList LPARENTHESIS . precedenceElement RPARENTHESIS COMMA
+    (31) precedenceElement -> . precedenceElement COMMA apostropheStr
+    (32) precedenceElement -> . apostropheStr COMMA apostropheStr
+
+    apostropheStr   shift and go to state 61
+
+    precedenceElement              shift and go to state 65
+
+state 60
+
+    (29) precedenceList -> LPARENTHESIS precedenceElement . RPARENTHESIS COMMA
+    (31) precedenceElement -> precedenceElement . COMMA apostropheStr
+
+    RPARENTHESIS    shift and go to state 66
+    COMMA           shift and go to state 67
+
+
+state 61
+
+    (32) precedenceElement -> apostropheStr . COMMA apostropheStr
+
+    COMMA           shift and go to state 68
+
+
+state 62
+
+    (33) Production -> id COLON SimbolList LCBRACKET text . RCBRACKET
+
+    RCBRACKET       shift and go to state 69
+
+
+state 63
+
+    (18) ErrorDefinition -> POINT ERROR LPARENTHESIS quotationStr COMMA ERRORVALUE . RPARENTHESIS
+    (19) ERRORVALUE -> ERRORVALUE . text
+    (20) ERRORVALUE -> ERRORVALUE . LPARENTHESIS
+    (21) ERRORVALUE -> ERRORVALUE . RPARENTHESIS
+
+    RPARENTHESIS    shift and go to state 71
+    text            shift and go to state 72
+    LPARENTHESIS    shift and go to state 70
+
+
+state 64
+
+    (13) TokenDefinition -> regex RETURN LPARENTHESIS apostropheStr COMMA RETURNVALUE . RPARENTHESIS
+    (14) RETURNVALUE -> RETURNVALUE . text
+    (15) RETURNVALUE -> RETURNVALUE . LPARENTHESIS
+    (16) RETURNVALUE -> RETURNVALUE . RPARENTHESIS
+
+    RPARENTHESIS    shift and go to state 74
+    text            shift and go to state 75
+    LPARENTHESIS    shift and go to state 73
+
+
+state 65
+
+    (28) precedenceList -> precedenceList LPARENTHESIS precedenceElement . RPARENTHESIS COMMA
+    (31) precedenceElement -> precedenceElement . COMMA apostropheStr
+
+    RPARENTHESIS    shift and go to state 76
+    COMMA           shift and go to state 67
+
+
+state 66
+
+    (29) precedenceList -> LPARENTHESIS precedenceElement RPARENTHESIS . COMMA
+
+    COMMA           shift and go to state 77
+
+
+state 67
+
+    (31) precedenceElement -> precedenceElement COMMA . apostropheStr
+
+    apostropheStr   shift and go to state 78
+
+
+state 68
+
+    (32) precedenceElement -> apostropheStr COMMA . apostropheStr
+
+    apostropheStr   shift and go to state 79
+
+
+state 69
+
+    (33) Production -> id COLON SimbolList LCBRACKET text RCBRACKET .
+
+    CODE            reduce using rule 33 (Production -> id COLON SimbolList LCBRACKET text RCBRACKET .)
+    YaccPRECEDENCE  reduce using rule 33 (Production -> id COLON SimbolList LCBRACKET text RCBRACKET .)
+    id              reduce using rule 33 (Production -> id COLON SimbolList LCBRACKET text RCBRACKET .)
+
+
+state 70
+
+    (20) ERRORVALUE -> ERRORVALUE LPARENTHESIS .
+
+    RPARENTHESIS    reduce using rule 20 (ERRORVALUE -> ERRORVALUE LPARENTHESIS .)
+    text            reduce using rule 20 (ERRORVALUE -> ERRORVALUE LPARENTHESIS .)
+    LPARENTHESIS    reduce using rule 20 (ERRORVALUE -> ERRORVALUE LPARENTHESIS .)
+
+
+state 71
+
+    (18) ErrorDefinition -> POINT ERROR LPARENTHESIS quotationStr COMMA ERRORVALUE RPARENTHESIS .
+    (21) ERRORVALUE -> ERRORVALUE RPARENTHESIS .
+
+    id              reduce using rule 18 (ErrorDefinition -> POINT ERROR LPARENTHESIS quotationStr COMMA ERRORVALUE RPARENTHESIS .)
+    RPARENTHESIS    reduce using rule 21 (ERRORVALUE -> ERRORVALUE RPARENTHESIS .)
+    text            reduce using rule 21 (ERRORVALUE -> ERRORVALUE RPARENTHESIS .)
+    LPARENTHESIS    reduce using rule 21 (ERRORVALUE -> ERRORVALUE RPARENTHESIS .)
+
+
+state 72
+
+    (19) ERRORVALUE -> ERRORVALUE text .
+
+    RPARENTHESIS    reduce using rule 19 (ERRORVALUE -> ERRORVALUE text .)
+    text            reduce using rule 19 (ERRORVALUE -> ERRORVALUE text .)
+    LPARENTHESIS    reduce using rule 19 (ERRORVALUE -> ERRORVALUE text .)
+
+
+state 73
+
+    (15) RETURNVALUE -> RETURNVALUE LPARENTHESIS .
+
+    RPARENTHESIS    reduce using rule 15 (RETURNVALUE -> RETURNVALUE LPARENTHESIS .)
+    text            reduce using rule 15 (RETURNVALUE -> RETURNVALUE LPARENTHESIS .)
+    LPARENTHESIS    reduce using rule 15 (RETURNVALUE -> RETURNVALUE LPARENTHESIS .)
+
+
+state 74
+
+    (13) TokenDefinition -> regex RETURN LPARENTHESIS apostropheStr COMMA RETURNVALUE RPARENTHESIS .
+    (16) RETURNVALUE -> RETURNVALUE RPARENTHESIS .
+
+    POINT           reduce using rule 13 (TokenDefinition -> regex RETURN LPARENTHESIS apostropheStr COMMA RETURNVALUE RPARENTHESIS .)
+    regex           reduce using rule 13 (TokenDefinition -> regex RETURN LPARENTHESIS apostropheStr COMMA RETURNVALUE RPARENTHESIS .)
+    RPARENTHESIS    reduce using rule 16 (RETURNVALUE -> RETURNVALUE RPARENTHESIS .)
+    text            reduce using rule 16 (RETURNVALUE -> RETURNVALUE RPARENTHESIS .)
+    LPARENTHESIS    reduce using rule 16 (RETURNVALUE -> RETURNVALUE RPARENTHESIS .)
+
+
+state 75
+
+    (14) RETURNVALUE -> RETURNVALUE text .
+
+    RPARENTHESIS    reduce using rule 14 (RETURNVALUE -> RETURNVALUE text .)
+    text            reduce using rule 14 (RETURNVALUE -> RETURNVALUE text .)
+    LPARENTHESIS    reduce using rule 14 (RETURNVALUE -> RETURNVALUE text .)
+
+
+state 76
+
+    (28) precedenceList -> precedenceList LPARENTHESIS precedenceElement RPARENTHESIS . COMMA
+
+    COMMA           shift and go to state 80
+
+
+state 77
+
+    (29) precedenceList -> LPARENTHESIS precedenceElement RPARENTHESIS COMMA .
+
+    RBRACKET        reduce using rule 29 (precedenceList -> LPARENTHESIS precedenceElement RPARENTHESIS COMMA .)
+    LPARENTHESIS    reduce using rule 29 (precedenceList -> LPARENTHESIS precedenceElement RPARENTHESIS COMMA .)
+
+
+state 78
+
+    (31) precedenceElement -> precedenceElement COMMA apostropheStr .
+
+    RPARENTHESIS    reduce using rule 31 (precedenceElement -> precedenceElement COMMA apostropheStr .)
+    COMMA           reduce using rule 31 (precedenceElement -> precedenceElement COMMA apostropheStr .)
+
+
+state 79
+
+    (32) precedenceElement -> apostropheStr COMMA apostropheStr .
+
+    RPARENTHESIS    reduce using rule 32 (precedenceElement -> apostropheStr COMMA apostropheStr .)
+    COMMA           reduce using rule 32 (precedenceElement -> apostropheStr COMMA apostropheStr .)
+
+
+state 80
+
+    (28) precedenceList -> precedenceList LPARENTHESIS precedenceElement RPARENTHESIS COMMA .
+
+    RBRACKET        reduce using rule 28 (precedenceList -> precedenceList LPARENTHESIS precedenceElement RPARENTHESIS COMMA .)
+    LPARENTHESIS    reduce using rule 28 (precedenceList -> precedenceList LPARENTHESIS precedenceElement RPARENTHESIS COMMA .)
+
