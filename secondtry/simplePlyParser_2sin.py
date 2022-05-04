@@ -6,7 +6,7 @@ start = 'Program'
 
 #Production rules
 def p_Program(p):
-    "Program : LEX LexDefinition YACC YaccDefinition CODE"# CodeDefinition"
+    "Program : LEX LexDefinition YACC YaccDefinition CODE CodeDefinition"
 
 #### Lex Structure ####
 def p_LexDefinition(p):
@@ -113,25 +113,37 @@ def p_SimbolList_list_prec(p):
 def p_SimbolList_empty(p):
     "SimbolList : "
 
-##### CodeDefinition ####
-#def p_CodeDefinition_funtion(p):
-#    "CodeDefinition : Functions YaccDeclaration"# Parses"
-#
-#### Functions ###
-#def p_Functions_list(p):
-#    "Functions : Functions Function"
-#def p_Functions_empty(p):
-#    "Functions : "
-#    pass
-#
-### Function ##
-#def p_Function(p):
-#    "Function : DEF functionText"
-#    print(p[1] + p[2])
-#
-#### YaccDeclaration ###
-#def p_YaccDeclaration(p):
-#    "YaccDeclaration : id '=' fYACC"
+#### CodeDefinition ####
+def p_CodeDefinition_funtion(p):
+    "CodeDefinition : Functions "#YaccDeclaration"# Parses"
+    print(p[1])
+### Functions ###
+def p_Functions_list(p):
+    "Functions : Functions Function"
+    if(p[1]):
+        p[0] = p[1] + p[2]
+    else:
+        p[0] = p[2]
+def p_Functions_empty(p):
+    "Functions : "
+    pass
+
+## Function ##
+def p_Function(p):
+    "Function : DEF id LPARENTHESIS id RPARENTHESIS COLON FunctionText"
+    p[0] = p[1] + " " + p[2] + p[3] + p[4] + p[5] + p[6] + p[7]
+
+# Function Text#
+def p_FunctionText_list(p):
+    "FunctionText : FunctionText text"
+    p[0] = p[1] + p[2]
+def p_FunctionText_sing(p):
+    "FunctionText : text"
+    p[0] = p[1]
+
+### YaccDeclaration ###
+def p_YaccDeclaration(p):
+    "YaccDeclaration : id EQUALS fYACC"
 
 def p_error(p):
     print('Erro sintático: ',p)
