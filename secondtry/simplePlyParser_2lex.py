@@ -9,11 +9,10 @@ tokens = ['LEX','YACC','CODE',
         'EQUALS','LPARENTHESIS','RPARENTHESIS','COMMA','POINT',
         'COLON','LBRACKET','RBRACKET','LCBRACKET','RCBRACKET',
         'YaccPRECEDENCE','fYACC','PREC',
-        'DEF','RETURN','ERROR','FUNCTIONEND',
+        'DEF','RETURN','ERROR','FUNCTIONEND','PARSE',
         'id',
-        'quotationStr','apostropheStr','regex','regexreturn',
-        'comment','text',
-        'functionText']
+        'quotationStr','apostropheStr','regex',
+        'comment','text']
 
 states = (
     ('lexstate','exclusive'),
@@ -22,6 +21,7 @@ states = (
     ('regexstate','exclusive'),
     ('errorstate','exclusive'),
     ('yaccvariablestate','exclusive'),
+    ('precedencestate','exclusive'),
     ('productionstate','exclusive'),
     ('productioncode','exclusive'),
     ('functionstate','exclusive'),
@@ -117,6 +117,7 @@ def t_errorstate_RPARENTHESIS(t):
 #YACC STATE#
 def t_yaccstate_YaccPRECEDENCE(t):
     r'%precedence'
+    t.lexer.begin('precedencestate')
     return t
 def t_yaccstate_EQUALS(t):
     r'='
@@ -125,6 +126,12 @@ def t_yaccstate_EQUALS(t):
 def t_yaccstate_COLON(t):
     r':'
     t.lexer.begin('productionstate')
+    return t
+##################
+#PRECEDENCE STATE#
+def t_precedencestate_RBRACKET(t):
+    r'\]'
+    t.lexer.begin('yaccstate')
     return t
 #####################
 #YACC VARIABLE STATE#
@@ -170,53 +177,32 @@ def t_codestate_COLON(t):
 def t_codestate_fYACC(t):
     r'yacc\(\)'
     return t
+def t_codestate_POINT(t):
+    r'\.'
+    return t
+def t_codestate_PARSE(t):
+    r'parse'
+    return t
 ################
 #FUNCTION STATE#
-#def t_functionstate_DEF(t):
-#    r'def'
-#    t.lexer.begin('codestate')
-#    return t
-#def t_functionstate_text(t):
-#    r'.+'
-#    return t
-#def t_functionstate_newline(t):
-#    r'\n+([^(def)]\s)'
-#    pass
-#def t_functionstate_tab(t):
-#    r'\t'
-#    print('\t')
-#def t_functionstate_FUNCTIONEND(t):
-#    r'\n'
-#    print('\n')
-#    t.lexer.begin('codestate')
-#    return t
-##############
 def t_functionstate_DEF(t):
     r'def'
     t.lexer.begin('codestate')
     return t
 def t_functionstate_text(t):
-    r'(\t| )+.+'
+    r'(.|\t|\ )+'
     return t
 def t_functionstate_newline(t):
-    r'\n+[^(def)]( |\t)+'
-    pass
+    r'\n\ '
 def t_functionstate_FUNCTIONEND(t):
-    r'\n+'
+    r'\n'
     t.lexer.begin('codestate')
     return t
-
-
-
-t_functionstate_ignore = ""
 #def t_codestate_functionParameters(t):
 #    r'[a-zA-Z_]\w*\([a-zA-Z_]\w*\):'
 #    t.lexer.begin('functionstate')
 #    return t
-#def t_functionstate_functionText(t):
-#    r'(.*\n(\s|\t)+)+'
-#    t.lexer.begin('codestate')
-#    return t
+
 
 #####
 #ANY#
@@ -257,13 +243,16 @@ def t_ANY_error(t):
     #print("Caráter Ilegal:", t.value[0])
     t.lexer.skip(1)
 
-t_ANY_ignore = " \t"
+t_ANY_ignore = ""
+t_regexstate_ignore = " \t"
+t_errorstate_ignore = " \t"
+t_productioncode_ignore = " "
 
 lexer = lex.lex()
 lexer.parenthesis = 0
 
-import sys
-program = sys.stdin.read()
-lexer.input(program)
-for tok in lexer:
-    print(tok)
+#import sys
+#program = sys.stdin.read()
+#lexer.input(program)
+#for tok in lexer:
+#    print(tok)
